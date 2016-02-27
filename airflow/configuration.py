@@ -56,6 +56,8 @@ defaults = {
         's3_log_folder': '',
         'dag_concurrency': 16,
         'max_active_runs_per_dag': 16,
+        'sql_alchemy_pool_size': 5,
+        'sql_alchemy_pool_recycle': 3600,
     },
     'webserver': {
         'base_url': 'http://localhost:8080',
@@ -119,6 +121,15 @@ executor = SequentialExecutor
 # SqlAlchemy supports many different database engine, more information
 # their website
 sql_alchemy_conn = sqlite:///{AIRFLOW_HOME}/airflow.db
+
+# The SqlAlchemy pool size is the maximum number of database connections
+# in the pool.
+sql_alchemy_pool_size = 5
+
+# The SqlAlchemy pool recycle is the number of seconds a connection
+# can be idle in the pool before it is invalidated. This config does
+# not apply to sqlite.
+sql_alchemy_pool_recycle = 3600
 
 # The amount of parallelism as a setting to the executor. This defines
 # the max number of task instances that should run simultaneously
@@ -461,4 +472,3 @@ def has_option(section, key):
 
 def get_dags_folder():
     return os.path.expanduser(get('core', 'DAGS_FOLDER'))
-
